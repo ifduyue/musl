@@ -180,11 +180,11 @@ typedef char compiler_defines_long_double_incorrectly[9-(int)sizeof(long double)
 
 static int fmt_fp(FILE *f, long double y, int w, int p, int fl, int t, int ps)
 {
-	int bufsize = (ps==BIGLPRE)
-		? (LDBL_MANT_DIG+28)/29 + 1 +          // mantissa expansion
-		  (LDBL_MAX_EXP+LDBL_MANT_DIG+28+8)/9  // exponent expansion
-		: (DBL_MANT_DIG+28)/29 + 1 +
-		  (DBL_MAX_EXP+DBL_MANT_DIG+28+8)/9;
+	int max_mant_dig = (ps==BIGLPRE) ? LDBL_MANT_DIG : DBL_MANT_DIG;
+	int max_exp = (ps==BIGLPRE) ? LDBL_MAX_EXP : DBL_MAX_EXP;
+	int max_mant_slots = (max_mant_dig+28)/29 + 1;
+	int max_exp_slots = (max_exp+max_mant_dig+28+8)/9;
+	int bufsize = max_mant_slots + max_exp_slots;
 	uint32_t big[bufsize];
 	uint32_t *a, *d, *r, *z;
 	int e2=0, e, i, j, l;
@@ -266,7 +266,7 @@ static int fmt_fp(FILE *f, long double y, int w, int p, int fl, int t, int ps)
 	if (y) y *= 0x1p28, e2-=28;
 
 	if (e2<0) a=r=z=big;
-	else a=r=z=big+sizeof(big)/sizeof(*big) - LDBL_MANT_DIG - 1;
+	else a=r=z=big+sizeof(big)/sizeof(*big) - max_mant_slots - 1;
 
 	do {
 		*z = y;
