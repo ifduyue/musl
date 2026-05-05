@@ -74,7 +74,6 @@ static size_t mwrite(FILE *f, const unsigned char *buf, size_t len)
 	if (c->pos > c->len) {
 		c->len = c->pos;
 		if (c->len < c->size) c->buf[c->len] = 0;
-		else if ((f->flags&F_NORD) && c->size) c->buf[c->size-1] = 0;
 	}
 	return len;
 }
