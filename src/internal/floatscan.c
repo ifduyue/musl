@@ -347,7 +347,7 @@ static long double hexfloat(FILE *f, int bits, int emin, int sign, int pok)
 			else d = c-'0';
 			if (dc<8) {
 				x = x*16 + d;
-			} else if (dc < LDBL_MANT_DIG/4+1) {
+			} else if (dc < (LDBL_MANT_DIG+3)/4+1) {
 				y += d*(scale/=16);
 			} else if (d && !gottail) {
 				y += 0.5*scale;
