@@ -256,7 +256,7 @@ static long double decfloat(FILE *f, int c, int bits, int emin, int sign, int po
 
 	/* Assemble desired bits into floating point variable */
 	for (y=i=0; i<LD_B1B_DIG; i++) {
-		if ((a+i & MASK)==z) x[(z=(z+1 & MASK))-1] = 0;
+		if ((a+i & MASK)==z) x[z] = 0, z = z+1 & MASK;
 		y = 1000000000.0L * y + x[a+i & MASK];
 	}
 
